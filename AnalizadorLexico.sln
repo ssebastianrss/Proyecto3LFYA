@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "AnalizadorLexico", "AnalizadorLexico\AnalizadorLexico.pyproj", "{1032C01A-976F-4F55-826F-2DA4FBCA3E96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1032C01A-976F-4F55-826F-2DA4FBCA3E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1032C01A-976F-4F55-826F-2DA4FBCA3E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {994AA3A2-E40B-4BF5-BE2E-A14DF0E71358}
+	EndGlobalSection
+EndGlobal
