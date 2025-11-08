@@ -13,3 +13,7 @@ Para instalar y ejecutar el simulador, se deben seguir los siguientes pasos:
 1. Clonar el repositorio en la máquina local:
    ```bash
    git clone https://github.com/ssebastianrss/Proyecto3LFYA
+   
+2. Para ejecutar el simulador, se debe correr el siguiente comando en la terminal:
+   ```bash
+   python main.py
