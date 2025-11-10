@@ -61,3 +61,6 @@ El simulador permite al usuario:
    - **Reset**: Restablece la máquina y la cadena ingresada.
    - **Velocidad**: Ajustar la velocidad de la simulación utilizando la barra deslizante.
 
+     <img width="1157" height="692" alt="imagen" src="https://github.com/user-attachments/assets/da18f55e-2e7d-418b-a763-632a00e6abbd" />
+
+
