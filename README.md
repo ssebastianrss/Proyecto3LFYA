@@ -34,7 +34,7 @@ El simulador permite al usuario:
 1. Abrir una **IDE** (como **Visual Studio Code** o **PyCharm**).
 2. En **Visual Studio Code**:
    - Abrir el terminal integrado con **Ctrl + `**.
-   - Clonar el repositorio con el comando `git clone <URL del repositorio>`.
+   - Clonar el repositorio con el comando `https://github.com/ssebastianrss/Proyecto3LFYA`.
 
    Si no se usa **Git**, se puede descargar el archivo como un **zip** y extraerlo en una carpeta local.
 
@@ -45,8 +45,8 @@ El simulador permite al usuario:
 
 ### Paso 4: Ejecutar el Proyecto
 
-1. Abrir el archivo **`main.py`** dentro de la IDE.
-2. Ejecutar el proyecto haciendo clic en el botón de **play** (triángulo verde) en la parte superior de la ventana de la IDE.
+1. Abrir el archivo **`tmsim_gui.py`** dentro de la IDE.
+2. Ejecutar el proyecto haciendo clic en el botón de **play** en la parte superior de la ventana de la IDE.
 
 ## Uso
 
