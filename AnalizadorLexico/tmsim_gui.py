@@ -167,7 +167,7 @@ def tm_one_then_pairs_then_zero() -> TuringMachine:
     d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
 
     d["q2"]["1"] = Transition('1', Direction.R, "q3")
-    d["q2"]["0"] = Transition('0', Direction.S, "q_accept") 
+    d["q2"]["0"] = Transition('0', Direction.S, "q_accept")
     d["q2"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
 
     d["q3"]["0"] = Transition('0', Direction.R, "q2")
@@ -356,7 +356,7 @@ HEAD_H = 12
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Simulador de Máquina de Turing — Demo GUI")
+        self.title("Simulador de Máquina de Turing")
         self.geometry("920x520")
         self.resizable(False, False)
         self.tm: TuringMachine | None = None
@@ -370,34 +370,22 @@ class App(tk.Tk):
     def _build_ui(self):
         top = ttk.Frame(self, padding=8)
         top.pack(side=tk.TOP, fill=tk.X)
+
         ttk.Label(top, text="Expresión/MT:").grid(row=0, column=0, sticky="w")
         self.combo = ttk.Combobox(top, width=42,
                                   values=[item["name"] for item in REGEX_TABLE], state="readonly")
         self.combo.current(0)
-        self.combo.grid(row=0, column=1, padx=6)
-        self.combo.bind("<<ComboboxSelected>>", lambda e: self.on_change_regex())
-        ttk.Label(top, text="Cadena:").grid(row=0, column=2, padx=(12, 0))
+        self.combo.grid(row=0, column=1, padx=6, sticky="w")
+
+        top.grid_columnconfigure(2, weight=1)
+
+        ttk.Label(top, text="Cadena:").grid(row=0, column=3, padx=(12, 0), sticky="e")
         self.entry = ttk.Entry(top, width=28)
-        self.entry.grid(row=0, column=3, padx=6)
+        self.entry.grid(row=0, column=4, padx=6, sticky="e")
         self.entry.insert(0, REGEX_TABLE[0]["examples"][0])
 
         self.btn_insert = ttk.Button(top, text="Insertar", command=self.on_insert)
-        self.btn_insert.grid(row=0, column=4, padx=6)
-
-        ctrl = ttk.Frame(self, padding=8)
-        ctrl.pack(side=tk.TOP, fill=tk.X)
-        self.btn_play = ttk.Button(ctrl, text="Play ▶", command=self.on_play)
-        self.btn_play.grid(row=0, column=0, padx=2)
-        self.btn_pause = ttk.Button(ctrl, text="Pause ⏸", command=self.on_pause)
-        self.btn_pause.grid(row=0, column=1, padx=2)
-        self.btn_step = ttk.Button(ctrl, text="Paso ➤", command=self.on_step)
-        self.btn_step.grid(row=0, column=2, padx=2)
-        self.btn_reset = ttk.Button(ctrl, text="Reset ↺", command=self.on_reset)
-        self.btn_reset.grid(row=0, column=3, padx=2)
-        ttk.Label(ctrl, text="Velocidad:").grid(row=0, column=4, padx=(12, 2))
-        self.speed = ttk.Scale(ctrl, from_=600, to=30, value=self.speed_ms,
-                               command=self.on_speed_change, orient=tk.HORIZONTAL, length=220)
-        self.speed.grid(row=0, column=5, padx=2)
+        self.btn_insert.grid(row=0, column=5, padx=6, sticky="e")
 
         info = ttk.Frame(self, padding=8)
         info.pack(side=tk.TOP, fill=tk.X)
@@ -412,6 +400,29 @@ class App(tk.Tk):
 
         self.canvas = tk.Canvas(self, width=900, height=320, bg="#101418", highlightthickness=0)
         self.canvas.pack(side=tk.TOP, pady=8)
+
+        bottom = ttk.Frame(self, padding=(8, 6))
+        bottom.pack(side=tk.BOTTOM, fill=tk.X)
+
+        ctrl = ttk.Frame(bottom)
+        ctrl.pack(side=tk.TOP, pady=2)
+        ctrl.pack_configure(anchor="center")
+
+        self.btn_play = ttk.Button(ctrl, text="Play ▶", command=self.on_play)
+        self.btn_play.grid(row=0, column=0, padx=4)
+        self.btn_pause = ttk.Button(ctrl, text="Pause ⏸", command=self.on_pause)
+        self.btn_pause.grid(row=0, column=1, padx=4)
+        self.btn_step = ttk.Button(ctrl, text="Paso ➤", command=self.on_step)
+        self.btn_step.grid(row=0, column=2, padx=4)
+        self.btn_reset = ttk.Button(ctrl, text="Reset ↺", command=self.on_reset)
+        self.btn_reset.grid(row=0, column=3, padx=4)
+
+        speed_fr = ttk.Frame(bottom)
+        speed_fr.pack(side=tk.RIGHT)
+        ttk.Label(speed_fr, text="Velocidad:").pack(side=tk.LEFT, padx=(0, 6))
+        self.speed = ttk.Scale(speed_fr, from_=600, to=30, value=self.speed_ms,
+                               command=self.on_speed_change, orient=tk.HORIZONTAL, length=220)
+        self.speed.pack(side=tk.LEFT)
 
     def on_insert(self):
         if self.tm is None:
