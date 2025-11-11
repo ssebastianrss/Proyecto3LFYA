@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, Set, List
 
+# Constantes y clases base
 BLANK = '_'
 EPSILON = 'ε'
 
@@ -110,9 +111,14 @@ def tm_one_or_more_then_any() -> TuringMachine:
     d["q0"]["0"] = Transition('0', Direction.R, "q0")
     d["q0"]["1"] = Transition('1', Direction.R, "q1")
     d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q0"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q0"]["b"] = Transition('b', Direction.S, "q_reject")
 
+    d["q1"]["0"] = Transition('0', Direction.R, "q1")
     d["q1"]["1"] = Transition('1', Direction.R, "q1")
     d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
+    d["q1"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q1"]["b"] = Transition('b', Direction.S, "q_reject")
 
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
@@ -145,10 +151,14 @@ def tm_ab_star() -> TuringMachine:
     d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
     d["q0"]["a"] = Transition('a', Direction.R, "q1")
     d["q0"]["b"] = Transition('b', Direction.S, "q_reject")
+    d["q0"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q0"]["1"] = Transition('1', Direction.S, "q_reject")
 
     d["q1"]["b"] = Transition('b', Direction.R, "q0")
     d["q1"]["a"] = Transition('a', Direction.S, "q_reject")
     d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q1"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q1"]["1"] = Transition('1', Direction.S, "q_reject")
 
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
@@ -161,34 +171,46 @@ def tm_one_then_pairs_then_zero() -> TuringMachine:
     d["q0"]["1"] = Transition('1', Direction.R, "q1")
     d["q0"]["0"] = Transition('0', Direction.S, "q_reject")
     d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q0"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q0"]["b"] = Transition('b', Direction.S, "q_reject")
 
     d["q1"]["0"] = Transition('0', Direction.R, "q2")
     d["q1"]["1"] = Transition('1', Direction.S, "q_reject")
     d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q1"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q1"]["b"] = Transition('b', Direction.S, "q_reject")
 
     d["q2"]["1"] = Transition('1', Direction.R, "q3")
     d["q2"]["0"] = Transition('0', Direction.S, "q_accept")
     d["q2"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q2"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q2"]["b"] = Transition('b', Direction.S, "q_reject")
 
     d["q3"]["0"] = Transition('0', Direction.R, "q2")
     d["q3"]["1"] = Transition('1', Direction.S, "q_reject")
     d["q3"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q3"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q3"]["b"] = Transition('b', Direction.S, "q_reject")
 
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
 def tm_contains_at_least_one_a() -> TuringMachine:
-    states = {"q0", "qSeenA", "q_accept", "q_reject"}
+    states = {"q0", "q1", "q_accept", "q_reject"}
     acc, rej = {"q_accept"}, {"q_reject"}
     tape = Tape()
     d = {s: {} for s in states}
 
-    d["q0"]["a"] = Transition('a', Direction.R, "qSeenA")
+    d["q0"]["a"] = Transition('a', Direction.R, "q1")
     d["q0"]["b"] = Transition('b', Direction.R, "q0")
     d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q0"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q0"]["1"] = Transition('1', Direction.S, "q_reject")
 
-    d["qSeenA"]["a"] = Transition('a', Direction.R, "qSeenA")
-    d["qSeenA"]["b"] = Transition('b', Direction.R, "qSeenA")
-    d["qSeenA"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
+    d["q1"]["a"] = Transition('a', Direction.R, "q1")
+    d["q1"]["b"] = Transition('b', Direction.R, "q1")
+    d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
+    d["q1"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q1"]["1"] = Transition('1', Direction.S, "q_reject")
 
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
@@ -235,43 +257,42 @@ def tm_any_ab_star() -> TuringMachine:
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
 def tm_even_a() -> TuringMachine:
-    states = {"qEven", "qOdd", "q_accept", "q_reject"}
-    acc, rej = {"q_accept"}, {"q_reject"}
-    tape = Tape()
-    d = {s: {} for s in states}
-
-    d["qEven"]["a"] = Transition('a', Direction.R, "qOdd")
-    d["qEven"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
-
-    d["qOdd"]["a"] = Transition('a', Direction.R, "qEven")
-    d["qOdd"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
-
-    d["qEven"]["b"] = Transition('b', Direction.S, "q_reject")
-    d["qOdd"]["b"] = Transition('b', Direction.S, "q_reject")
-    d["qEven"]["0"] = Transition('0', Direction.S, "q_reject")
-    d["qOdd"]["0"] = Transition('0', Direction.S, "q_reject")
-    d["qEven"]["1"] = Transition('1', Direction.S, "q_reject")
-    d["qOdd"]["1"] = Transition('1', Direction.S, "q_reject")
-
-    return TuringMachine(states, "qEven", acc, rej, d, tape)
-
-def tm_ab_plus() -> TuringMachine:
-    states = {"q0", "q1", "q2", "q_accept", "q_reject"}
+    states = {"q0", "q1", "q_accept", "q_reject"}
     acc, rej = {"q_accept"}, {"q_reject"}
     tape = Tape()
     d = {s: {} for s in states}
 
     d["q0"]["a"] = Transition('a', Direction.R, "q1")
+    d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
     d["q0"]["b"] = Transition('b', Direction.S, "q_reject")
-    d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q0"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q0"]["1"] = Transition('1', Direction.S, "q_reject")
 
-    d["q1"]["b"] = Transition('b', Direction.R, "q2")
-    d["q1"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q1"]["a"] = Transition('a', Direction.R, "q0")
     d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q1"]["b"] = Transition('b', Direction.S, "q_reject")
+    d["q1"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q1"]["1"] = Transition('1', Direction.S, "q_reject")
 
-    d["q2"]["a"] = Transition('a', Direction.R, "q1")
-    d["q2"]["b"] = Transition('b', Direction.S, "q_reject")
-    d["q2"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
+    return TuringMachine(states, "q0", acc, rej, d, tape)
+
+def tm_ab_plus() -> TuringMachine:
+    states = {"q0", "q1", "q_accept", "q_reject"}
+    acc, rej = {"q_accept"}, {"q_reject"}
+    tape = Tape()
+    d = {s: {} for s in states}
+
+    d["q0"]["a"] = Transition('a', Direction.R, "q1")
+    d["q0"][BLANK] = Transition(BLANK, Direction.S, "q_reject")
+    d["q0"]["b"] = Transition('b', Direction.S, "q_reject")
+    d["q0"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q0"]["1"] = Transition('1', Direction.S, "q_reject")
+
+    d["q1"]["b"] = Transition('b', Direction.R, "q0")
+    d["q1"][BLANK] = Transition(BLANK, Direction.S, "q_accept")
+    d["q1"]["a"] = Transition('a', Direction.S, "q_reject")
+    d["q1"]["0"] = Transition('0', Direction.S, "q_reject")
+    d["q1"]["1"] = Transition('1', Direction.S, "q_reject")
 
     return TuringMachine(states, "q0", acc, rej, d, tape)
 
@@ -288,63 +309,63 @@ REGEX_TABLE = [
         "pattern": r"^0*1*$",
         "alphabet": "{0,1}",
         "factory": tm_zeros_then_ones,
-        "examples": ["", "0", "000", "01", "00111", "1100"]
+        "examples": ["", "0", "000", "1", "111", "0111"]
     },
     {
         "name": "(ab)*",
         "pattern": r"^(?:ab)*$",
         "alphabet": "{a,b}",
         "factory": tm_ab_star,
-        "examples": ["", "ab", "abab", "aba", "b"]
+        "examples": ["", "ab", "abab"]
     },
     {
         "name": "1(01)*0",
         "pattern": r"^1(?:01)*0$",
         "alphabet": "{0,1}",
         "factory": tm_one_then_pairs_then_zero,
-        "examples": ["10", "1010", "101010", "1", "100"]
+        "examples": ["10", "1010", "101010"]
     },
     {
         "name": "(a|b)*a(a|b)*",
         "pattern": r"^(?:a|b)*a(?:a|b)*$",
         "alphabet": "{a,b}",
         "factory": tm_contains_at_least_one_a,
-        "examples": ["a", "b", "abba", "bbbb", ""]
+        "examples": ["a", "ab", "ba", "aba", "bba"]
     },
     {
         "name": "a*",
         "pattern": r"^a*$",
         "alphabet": "{a}",
         "factory": tm_a_star,
-        "examples": ["", "a", "aa", "b", "0"]
+        "examples": ["", "a", "aa", "aaa"]
     },
     {
         "name": "b*",
         "pattern": r"^b*$",
         "alphabet": "{b}",
         "factory": tm_b_star,
-        "examples": ["", "b", "bbb", "a", "1"]
+        "examples": ["", "b", "bb", "bbb"]
     },
     {
         "name": "(a|b)*",
         "pattern": r"^(?:a|b)*$",
         "alphabet": "{a,b}",
         "factory": tm_any_ab_star,
-        "examples": ["", "a", "b", "abba", "aab1"]
+        "examples": ["", "a", "b", "ab", "ba", "aba"]
     },
     {
         "name": "(aa)*",
         "pattern": r"^(?:aa)*$",
         "alphabet": "{a}",
         "factory": tm_even_a,
-        "examples": ["", "aa", "aaaa", "a", "aaa", "b"]
+        "examples": ["", "aa", "aaaa"]
     },
     {
-        "name": "(ab)+(ab)*",
+        "name": "(ab)+",
         "pattern": r"^(?:ab)+$",
         "alphabet": "{a,b}",
         "factory": tm_ab_plus,
-        "examples": ["ab", "abab", "ababab", "a", "b"]
+        "examples": ["ab", "abab", "ababab"]
     }
 ]
 
@@ -370,20 +391,16 @@ class App(tk.Tk):
     def _build_ui(self):
         top = ttk.Frame(self, padding=8)
         top.pack(side=tk.TOP, fill=tk.X)
-
         ttk.Label(top, text="Expresión/MT:").grid(row=0, column=0, sticky="w")
         self.combo = ttk.Combobox(top, width=42,
                                   values=[item["name"] for item in REGEX_TABLE], state="readonly")
         self.combo.current(0)
         self.combo.grid(row=0, column=1, padx=6, sticky="w")
-
         top.grid_columnconfigure(2, weight=1)
-
         ttk.Label(top, text="Cadena:").grid(row=0, column=3, padx=(12, 0), sticky="e")
         self.entry = ttk.Entry(top, width=28)
         self.entry.grid(row=0, column=4, padx=6, sticky="e")
         self.entry.insert(0, REGEX_TABLE[0]["examples"][0])
-
         self.btn_insert = ttk.Button(top, text="Insertar", command=self.on_insert)
         self.btn_insert.grid(row=0, column=5, padx=6, sticky="e")
 
@@ -403,11 +420,9 @@ class App(tk.Tk):
 
         bottom = ttk.Frame(self, padding=(8, 6))
         bottom.pack(side=tk.BOTTOM, fill=tk.X)
-
         ctrl = ttk.Frame(bottom)
         ctrl.pack(side=tk.TOP, pady=2)
         ctrl.pack_configure(anchor="center")
-
         self.btn_play = ttk.Button(ctrl, text="Play ▶", command=self.on_play)
         self.btn_play.grid(row=0, column=0, padx=4)
         self.btn_pause = ttk.Button(ctrl, text="Pause ⏸", command=self.on_pause)
@@ -423,6 +438,8 @@ class App(tk.Tk):
         self.speed = ttk.Scale(speed_fr, from_=600, to=30, value=self.speed_ms,
                                command=self.on_speed_change, orient=tk.HORIZONTAL, length=220)
         self.speed.pack(side=tk.LEFT)
+
+        self.combo.bind("<<ComboboxSelected>>", lambda e: self.on_change_regex())
 
     def on_insert(self):
         if self.tm is None:
